@@ -1,18 +1,21 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
+import FakeForm from '/imports/ui/FakeForm';
 
 const Input = (props) => <input type="text" {...props} />
-const Button = (props) => <button {...props}>Change</button>
+const Button = (props) => <button type="submit" {...props}>Send</button>
 
 export default ({ onSend }) => {
-  const inputRef = useRef();
+  const [message, setMessage] = useState()
 
-  const onClick = () => {
-    const message = inputRef.current.value;
+  const onSubmit = () => {
     onSend(message)
+    setMessage('')
   }
 
   return <>
-    <input ref={inputRef} />
-    <Button onClick={onClick} />
+    <FakeForm onSubmit={onSubmit}>
+      <Input onChange={(e) => setMessage(e.target.value)} value={message || ''} />
+      <Button />
+    </FakeForm>
   </>
 };

@@ -1,5 +1,5 @@
 import React from 'react';
 
-export default () => (
-  "kk"
-);
+export default ({ room }) => {
+  return `Current room ${room}`
+};
