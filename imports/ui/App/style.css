@@ -1,0 +1,8 @@
+#container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: min-content auto min-content;
+  grid-template-areas: "." "." ".";
+  width: 100vw;
+  height: 100vh;
+}
