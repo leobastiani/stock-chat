@@ -5,7 +5,7 @@ const Input = (props) => <input type="text" {...props} />
 const Button = (props) => <button type="submit" {...props}>Send</button>
 
 export default ({ onSend }) => {
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState('')
 
   const onSubmit = () => {
     onSend(message)
@@ -14,7 +14,7 @@ export default ({ onSend }) => {
 
   return <>
     <FakeForm onSubmit={onSubmit}>
-      <Input onChange={(e) => setMessage(e.target.value)} value={message || ''} />
+      <Input onChange={(e) => setMessage(e.target.value)} value={message} />
       <Button />
     </FakeForm>
   </>

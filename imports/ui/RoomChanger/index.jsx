@@ -1,21 +1,20 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import FakeForm from '/imports/ui/FakeForm';
 
 const Input = (props) => <input placeholder="change room" type="text" {...props} />
 const Button = (props) => <button type="submit" {...props}>Change</button>
 
 export default ({ onChange }) => {
-  const inputRef = useRef();
+  const [input, setInput] = useState('')
 
   const onSubmit = () => {
-    const message = inputRef.current.value;
-    inputRef.current.value = '';
-    onChange(message)
+    onChange(input)
+    setInput('')
   }
 
   return <>
     <FakeForm onSubmit={onSubmit}>
-      <input ref={inputRef} />
+      <Input onChange={(e) => setInput(e.target.value)} value={input} />
       <Button />
     </FakeForm>
   </>

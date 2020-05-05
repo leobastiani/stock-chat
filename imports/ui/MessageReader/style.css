@@ -1,0 +1,10 @@
+.post {
+  display: grid;
+  grid-template-columns: min-content min-content auto;
+  grid-template-rows: 1fr;
+  gap: 0 10px;
+  grid-template-areas: ". . .";
+
+  border: 1px dotted black;
+  margin: 10px 5px;
+}
