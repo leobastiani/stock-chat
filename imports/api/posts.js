@@ -18,13 +18,6 @@ Meteor.methods({
         check(message, String);
 
         if (message != '') {
-            Posts.insert({
-                user,
-                message,
-                room,
-                createdAt: new Date(),
-            })
-
             const command = getCommandFromMessage(message)
             if (command) {
                 if (command.command == 'stock') {
@@ -38,8 +31,23 @@ Meteor.methods({
                             createdAt: new Date(),
                         })
                     }
+                } else {
+                    Posts.insert({
+                        user: 'Bot',
+                        message: `Unrecognized command '${command.command}'`,
+                        room,
+                        createdAt: new Date(),
+                    })
                 }
+                return ;
             }
+
+            Posts.insert({
+                user,
+                message,
+                room,
+                createdAt: new Date(),
+            })
         }
     }
 })
