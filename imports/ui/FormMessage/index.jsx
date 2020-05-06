@@ -5,7 +5,7 @@ const Input = (props) => <input type="text" {...props} />
 const Button = (props) => <button type="submit" {...props}>Send</button>
 
 export default ({ onSend }) => {
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('/stock=aapl.us')
 
   const onSubmit = () => {
     onSend(message)
