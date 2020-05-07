@@ -14,7 +14,9 @@
     "jquery": "^3.5.1",
     "meteor-node-stubs": "^1.0.0",
     "react": "^16.13.0",
-    "react-dom": "^16.13.0"
+    "react-chat-elements": "^10.9.2",
+    "react-dom": "^16.13.0",
+    "react-spinners": "^0.8.3"
   },
   "meteor": {
     "mainModule": {

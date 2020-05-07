@@ -6,3 +6,19 @@
   width: 100vw;
   height: 100vh;
 }
+
+.message-list {
+  background-color: aquamarine;
+}
+
+#header {
+  background-color: deepskyblue;
+  text-align: center;
+}
+
+#room {
+  margin: 5px;
+  border-radius: 5px;
+  width: 80%;
+  text-align: center;
+}

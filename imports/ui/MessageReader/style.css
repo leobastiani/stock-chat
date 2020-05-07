@@ -8,3 +8,11 @@
   border: 1px dotted black;
   margin: 10px 5px;
 }
+
+#loading {
+  margin: 20% 0;
+}
+
+#messages * {
+  font-size: 95% !important;
+}

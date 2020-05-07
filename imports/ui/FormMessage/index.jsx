@@ -1,21 +1,27 @@
 import React, { useRef, useState } from 'react';
 import FakeForm from '/imports/ui/FakeForm';
+import { Input, Button } from 'react-chat-elements'
 
-const Input = (props) => <input type="text" {...props} />
-const Button = (props) => <button type="submit" {...props}>Send</button>
+export default ({ onSubmit }) => {
+  const el = useRef()
 
-export default ({ onSend }) => {
-  const [message, setMessage] = useState('/stock=aapl.us')
-
-  const onSubmit = () => {
-    onSend(message)
-    setMessage('')
+  const onFormSubmit = () => {
+    const message = el.current.state.value
+    onSubmit(message)
+    el.current.clear()
   }
 
   return <>
-    <FakeForm onSubmit={onSubmit}>
-      <Input onChange={(e) => setMessage(e.target.value)} value={message} />
-      <Button />
+    <FakeForm onSubmit={onFormSubmit}>
+      <Input
+        placeholder="Type here..."
+        ref={el}
+        rightButtons={<Button
+          color='white'
+          backgroundColor='green'
+          text='Send' />
+        }
+      />
     </FakeForm>
   </>
 };

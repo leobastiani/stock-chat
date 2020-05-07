@@ -6,7 +6,7 @@ const wrapper = {
   overflowX: 'auto',
 }
 
-export default ({ children }) => {
+export default ({ children, ...props }) => {
   const el = useRef()
 
   const scrollToBottom = () => {
@@ -14,7 +14,7 @@ export default ({ children }) => {
     div.scrollTop = div.scrollHeight
   }
 
-  return <div ref={el} style={wrapper}>
+  return <div ref={el} style={wrapper} {...props}>
     {children(scrollToBottom)}
   </div>
 }
