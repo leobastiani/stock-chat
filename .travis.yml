@@ -1,0 +1,16 @@
+sudo: required
+language: node_js
+
+node_js:
+  - '12.16.1'
+
+before_install:
+  - node --version
+  - yarn --version
+
+install:
+  - "curl https://install.meteor.com | /bin/sh"
+  - "meteor npm install"
+
+script:
+  - meteor npm run test
