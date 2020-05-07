@@ -1,6 +1,6 @@
 import assert from "assert";
 import nock from 'nock';
-import StockQuote from './';
+import StockQuote from './StockQuote';
 
 const stockCodeAndResponses = {
     'aapl.us': `Symbol,Date,Time,Open,High,Low,Close,Volume\nAAPL.US,2020-05-06,22:00:01,300.46,303.24,298.87,300.63,35583438`,
@@ -49,7 +49,7 @@ describe('test with nock', () => {
 
         it('message', async () => {
             const stockQuote = await new StockQuote('aapl.us')
-            assert.equal(stockQuote.message, 'APPL.US quote is $300.63 per share')
+            assert.equal(stockQuote.message, 'AAPL.US quote is $300.63 per share')
         })
     })
 })
