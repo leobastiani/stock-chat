@@ -1,3 +1,4 @@
+import { Meteor } from "meteor/meteor";
 import assert from "assert";
 import nock from 'nock';
 import StockQuote from './StockQuote';
@@ -32,8 +33,8 @@ describe('with nock', () => {
         })
 
         it('message', async () => {
-            const stockQuote = await new StockQuote('invalid')
-            assert.equal(stockQuote.message, 'Quote INVALID is invalid')
+            const message = await Meteor.call('stock_quote_message', 'invalid')
+            assert.equal(message, 'Quote INVALID is invalid')
         })
     })
 
@@ -52,8 +53,8 @@ describe('with nock', () => {
         })
 
         it('message', async () => {
-            const stockQuote = await new StockQuote('aapl.us')
-            assert.equal(stockQuote.message, 'AAPL.US quote is $300.63 per share')
+            const message = await Meteor.call('stock_quote_message', 'aapl.us')
+            assert.equal(message, 'AAPL.US quote is $300.63 per share')
         })
     })
 })
@@ -64,7 +65,7 @@ describe('without connection', () => {
     })
 
     it('stock quote with error', async () => {
-        const stockQuote = await new StockQuote('aapl.us')
-        assert.equal(stockQuote.message, 'Server unavailable')
+        const message = await Meteor.call('stock_quote_message', 'aapl.us')
+        assert.equal(message, 'Server unavailable')
     })
 })

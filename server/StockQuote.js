@@ -11,28 +11,12 @@ export default class StockQuote {
     }
 
     async asyncConstructor() {
-        try {
-            const json = await StockQuote.fromApiAsJson(this.stock_code)
-            for (const key of StockQuote.KEYS) {
-                this[key] = json[key]
-            }
+        const json = await StockQuote.fromApiAsJson(this.stock_code)
+        for (const key of StockQuote.KEYS) {
+            this[key] = json[key]
+        }
 
-            this.isInvalid = this.Close == 'N/D'
-            this.setupMessage()
-        } catch(e) {
-            this.Symbol = this.stock_code.toUpperCase()
-            this.isInvalid = true
-            this.message = 'Server unavailable'
-        }
-    }
-
-    setupMessage() {
-        if (this.isInvalid) {
-            this.message = `Quote ${this.Symbol} is invalid`
-        }
-        else {
-            this.message = `${this.Symbol} quote is $${this.Close} per share`
-        }
+        this.isInvalid = this.Close == 'N/D'
     }
 
     static fromApi(stock_code) {
@@ -56,7 +40,17 @@ export default class StockQuote {
 
 Meteor.methods({
     async stock_quote_message(stock_code) {
-        const stockQuote = await new StockQuote(stock_code)
-        return stockQuote.message
+        try {
+            const stockQuote = await new StockQuote(stock_code)
+            if (stockQuote.isInvalid) {
+                return `Quote ${stockQuote.Symbol} is invalid`
+            }
+            else {
+                return `${stockQuote.Symbol} quote is $${stockQuote.Close} per share`
+            }
+        }
+        catch(e) {
+            return 'Server unavailable'
+        }
     }
 })
