@@ -7,8 +7,8 @@ it('can not be a command', () => {
 })
 
 it('has properties', () => {
-    const messageCommand = new MessageCommand('/some_command      =   some parameters')
+    const messageCommand = new MessageCommand('/some_command      =   some arguments')
     assert(messageCommand.isCommand)
     assert.equal(messageCommand.command, 'some_command')
-    assert.equal(messageCommand.parameters, 'some parameters')
+    assert.equal(messageCommand.arg, 'some arguments')
 })

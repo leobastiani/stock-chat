@@ -1,6 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
+import MessageCommand from "./MessageCommand";
 
 export const Messages = new Mongo.Collection('messages');
 
@@ -20,7 +21,7 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-    async 'posts.insert' (room, user, message) {
+    async 'messages.insert' (room, user, message) {
         check(room, checkRoomName);
         check(user, String);
         check(message, String);
@@ -29,36 +30,25 @@ Meteor.methods({
         message = message.trim()
 
         if (message != '') {
-            const command = getCommandFromMessage(message)
-            if (command) {
-                if (command.command == 'stock') {
-                    if (Meteor.isServer) {
-                        const message = await insertStockPost(command.arg)
-
-                        Messages.insert({
-                            user: 'Bot',
-                            message,
-                            room,
-                            createdAt: new Date(),
-                        })
-                    }
-                } else {
+            const mc = new MessageCommand(message)
+            if (mc.isCommand) {
+                if (mc.command == 'stock' && Meteor.isServer) {
+                    const stockQuote = await new StockQuote(mc.arg)
                     Messages.insert({
                         user: 'Bot',
-                        message: `Unrecognized command '${command.command}'`,
+                        message: stockQuote.message,
                         room,
                         createdAt: new Date(),
                     })
                 }
-                return ;
+            } else {
+                Messages.insert({
+                    user,
+                    message,
+                    room,
+                    createdAt: new Date(),
+                })
             }
-
-            Messages.insert({
-                user,
-                message,
-                room,
-                createdAt: new Date(),
-            })
         }
     }
 })

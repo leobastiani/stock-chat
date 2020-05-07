@@ -5,9 +5,9 @@ export default class MessageCommand {
         const match = message.match(/^\/(\w+)(?:\s*=\s*(.*))?$/)
         this.isCommand = Boolean(match)
         if(this.isCommand) {
-            const [_, command, parameters] = match
+            const [_, command, arg] = match
             this.command = command
-            this.parameters = parameters
+            this.arg = arg
         }
     }
 }
