@@ -1,13 +1,18 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check';
+import { check, Match } from 'meteor/check';
 import { getCommandFromMessage, insertStockPost } from '/imports/command'
 
 export const Messages = new Mongo.Collection('messages');
 
-export function checkRoomName(romm) {
-    return 'kk'
-}
+export const checkRoomName = Match.Where((room) => {
+    check(room, String);
+    if (room.length > 30) {
+        throw new Match.Error('room name too long')
+    }
+
+    return true
+});
 
 if (Meteor.isServer) {
     Meteor.publish('messages', (room) => {
@@ -17,7 +22,7 @@ if (Meteor.isServer) {
 
 Meteor.methods({
     async 'posts.insert' (room, user, message) {
-        check(room, String);
+        check(room, checkRoomName);
         check(user, String);
         check(message, String);
 
