@@ -3,9 +3,9 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Messages } from '/imports/api/messages';
 import './style'
 
-const User = ({ children: user }) => {
+const User = ({ children: username }) => {
   return <div>
-    <span style={{color: 'red', whiteSpace: 'nowrap'}}>{user}</span>:
+    <span style={{color: 'red', whiteSpace: 'nowrap'}}>{username}</span>:
   </div>
 }
 
@@ -17,10 +17,10 @@ const Message = ({ children: message }) => {
   return <div>{message}</div>
 }
 
-const Post = ({ user, message, createdAt: timeStamp }) => {
+const Post = ({ username, message, createdAt: timeStamp }) => {
   return <div className="post">
     <TimeStamp>{timeStamp}</TimeStamp>
-    <User>{user}</User>
+    <User>{username}</User>
     <Message>{message}</Message>
   </div>
 }

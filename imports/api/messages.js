@@ -21,10 +21,14 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-    async 'messages.insert' (room, user, message) {
+    async 'messages.insert' (room, message) {
         check(room, checkRoomName);
-        check(user, String);
         check(message, String);
+
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
+        let username = Meteor.users.findOne(this.userId).username
 
         room = room.trim()
         message = message.trim()
@@ -33,16 +37,17 @@ Meteor.methods({
             const mc = new MessageCommand(message)
             if (mc.isCommand) {
                 // Client should stop
-                if (Meteor.isClient) return ;
-                
-                user = 'Bot'
+                if (Meteor.isClient) return;
+
+                username = 'Bot'
                 if (mc.command == 'stock') {
                     message = await Meteor.call('stock_quote_message', mc.arg)
                 }
             }
 
             Messages.insert({
-                user,
+                user: this.userId,
+                username,
                 message,
                 room,
                 createdAt: new Date(),

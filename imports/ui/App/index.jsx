@@ -7,7 +7,7 @@ import Scroller from '../RoomChanger/Scroller';
 import AccountsUIWrapper from '/imports/ui/AccountsUIWrapper'
 
 const onSend = (room, message) => {
-  Meteor.call('messages.insert', room, 'Leo', message)
+  Meteor.call('messages.insert', room, message)
 }
 
 export const App = () => {
