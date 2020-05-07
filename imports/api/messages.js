@@ -1,7 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
-import { getCommandFromMessage, insertStockPost } from '/imports/command'
 
 export const Messages = new Mongo.Collection('messages');
 
@@ -25,6 +24,9 @@ Meteor.methods({
         check(room, checkRoomName);
         check(user, String);
         check(message, String);
+
+        room = room.trim()
+        message = message.trim()
 
         if (message != '') {
             const command = getCommandFromMessage(message)
