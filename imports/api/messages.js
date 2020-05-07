@@ -2,6 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import MessageCommand from "./MessageCommand";
+import { publishComposite } from 'meteor/reywood:publish-composite';
 
 export const Messages = new Mongo.Collection('messages');
 
@@ -15,8 +16,17 @@ export const checkRoomName = Match.Where((room) => {
 });
 
 if (Meteor.isServer) {
-    Meteor.publish('messages', (room) => {
-        return Messages.find({ room: { $eq: room } });
+    publishComposite('messages', function(room) {
+        return {
+            find() {
+                return Messages.find({ room: { $eq: room } })
+            },
+            children: [{
+                find(message) {
+                    return Meteor.users.find({ _id: message.owner }, { fields: { username: 1 } });
+                }
+            }]
+        }
     });
 }
 
@@ -28,7 +38,7 @@ Meteor.methods({
         if (!this.userId) {
             throw new Meteor.Error('not-authorized');
         }
-        let username = Meteor.users.findOne(this.userId).username
+        let owner = this.userId
 
         room = room.trim()
         message = message.trim()
@@ -36,18 +46,16 @@ Meteor.methods({
         if (message != '') {
             const mc = new MessageCommand(message)
             if (mc.isCommand) {
-                // Client should stop
                 if (Meteor.isClient) return;
 
-                username = 'Bot'
+                owner = Meteor.call('Bot')._id
                 if (mc.command == 'stock') {
                     message = await Meteor.call('stock_quote_message', mc.arg)
                 }
             }
 
             Messages.insert({
-                user: this.userId,
-                username,
+                owner,
                 message,
                 room,
                 createdAt: new Date(),

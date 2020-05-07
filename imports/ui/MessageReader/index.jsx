@@ -1,9 +1,10 @@
+import { Meteor } from "meteor/meteor";
 import React, { useEffect } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Messages } from '/imports/api/messages';
 import './style'
 
-const User = ({ children: username }) => {
+const User = ({ children: { username } }) => {
   return <div>
     <span style={{color: 'red', whiteSpace: 'nowrap'}}>{username}</span>:
   </div>
@@ -17,21 +18,23 @@ const MessageText = ({ children: message }) => {
   return <div>{message}</div>
 }
 
-const Message = ({ username, message, createdAt: timeStamp }) => {
+const Message = ({ owner, message, createdAt: timeStamp }) => {
   return <div className="post">
     <TimeStamp>{timeStamp}</TimeStamp>
-    <User>{username}</User>
+    <User>{Meteor.users.findOne(owner)}</User>
     <MessageText>{message}</MessageText>
   </div>
 }
 
 export default ({ scrollToBottom, room }) => {
-  const { ready, messages } = useTracker(() => {
+  const { ready, messages, users } = useTracker(() => {
     const subscription = Meteor.subscribe('messages', room)
     const messages = Messages.find({}, { sort: {createdAt: 1}}).fetch()
+    const users = Meteor.users.find({}).fetch()
     return {
       ready: subscription.ready(),
       messages,
+      users,
     }
   })
 
