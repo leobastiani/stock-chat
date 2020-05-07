@@ -3,11 +3,15 @@ import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { getCommandFromMessage, insertStockPost } from '/imports/command'
 
-export const Posts = new Mongo.Collection('posts');
+export const Messages = new Mongo.Collection('messages');
+
+export function checkRoomName(romm) {
+    return 'kk'
+}
 
 if (Meteor.isServer) {
-    Meteor.publish('posts', (room) => {
-        return Posts.find({ room: { $eq: room } }, { sort: { createdAt: -1 }, limit: 50 });
+    Meteor.publish('messages', (room) => {
+        return Messages.find({ room: { $eq: room } });
     });
 }
 
@@ -24,7 +28,7 @@ Meteor.methods({
                     if (Meteor.isServer) {
                         const message = await insertStockPost(command.arg)
 
-                        Posts.insert({
+                        Messages.insert({
                             user: 'Bot',
                             message,
                             room,
@@ -32,7 +36,7 @@ Meteor.methods({
                         })
                     }
                 } else {
-                    Posts.insert({
+                    Messages.insert({
                         user: 'Bot',
                         message: `Unrecognized command '${command.command}'`,
                         room,
@@ -42,7 +46,7 @@ Meteor.methods({
                 return ;
             }
 
-            Posts.insert({
+            Messages.insert({
                 user,
                 message,
                 room,
