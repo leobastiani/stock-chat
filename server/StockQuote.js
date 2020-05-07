@@ -1,4 +1,5 @@
 import csv from 'csvtojson'
+import { Messages } from "/imports/api/messages";
 
 export default class StockQuote {
     static KEYS = ['Symbol', 'Date', 'Time', 'Open', 'High', 'Low', 'Close', 'Volume']
@@ -52,3 +53,10 @@ export default class StockQuote {
         return array[0]
     }
 }
+
+Meteor.methods({
+    async stock_quote_message(stock_code) {
+        const stockQuote = await new StockQuote(stock_code)
+        return stockQuote.message
+    }
+})

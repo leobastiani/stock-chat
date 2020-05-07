@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
-import { Posts } from '/imports/api/posts';
+import { Messages } from '/imports/api/messages';
 import './style'
 
 const User = ({ children: user }) => {
@@ -26,24 +26,24 @@ const Post = ({ user, message, createdAt: timeStamp }) => {
 }
 
 export default ({ scrollToBottom, room }) => {
-  const { ready, posts } = useTracker(() => {
-    const subscription = Meteor.subscribe('posts', room)
-    const posts = Posts.find({}, { sort: {createdAt: 1}}).fetch()
+  const { ready, messages } = useTracker(() => {
+    const subscription = Meteor.subscribe('messages', room)
+    const messages = Messages.find({}, { sort: {createdAt: 1}}).fetch()
     return {
       ready: subscription.ready(),
-      posts,
+      messages,
     }
   })
 
   useEffect(() => {
     ready && scrollToBottom()
-  }, [posts])
+  }, [messages])
   
   if(!ready) {
     return 'Loading'
   }
 
-  return <div id="posts">
-    {posts.map(post => <Post key={post._id} {...post} />)}
+  return <div id="messages">
+    {messages.map(post => <Post key={post._id} {...post} />)}
   </div>
 };

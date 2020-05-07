@@ -3,11 +3,11 @@ import './style.css';
 import RoomChanger from '/imports/ui/RoomChanger';
 import MessageReader from '/imports/ui/MessageReader';
 import FormMessage from '/imports/ui/FormMessage';
-import { Posts } from '/imports/api/posts';
+import { Messages } from '/imports/api/messages';
 import Scroller from '../RoomChanger/Scroller';
 
 const onSend = (room, message) => {
-  Meteor.call('posts.insert', room, 'Leo', message)
+  Meteor.call('messages.insert', room, 'Leo', message)
 }
 
 export const App = () => {

@@ -32,23 +32,21 @@ Meteor.methods({
         if (message != '') {
             const mc = new MessageCommand(message)
             if (mc.isCommand) {
-                if (mc.command == 'stock' && Meteor.isServer) {
-                    const stockQuote = await new StockQuote(mc.arg)
-                    Messages.insert({
-                        user: 'Bot',
-                        message: stockQuote.message,
-                        room,
-                        createdAt: new Date(),
-                    })
+                // Client should stop
+                if (Meteor.isClient) return ;
+                
+                user = 'Bot'
+                if (mc.command == 'stock') {
+                    message = await Meteor.call('stock_quote_message', mc.arg)
                 }
-            } else {
-                Messages.insert({
-                    user,
-                    message,
-                    room,
-                    createdAt: new Date(),
-                })
             }
+
+            Messages.insert({
+                user,
+                message,
+                room,
+                createdAt: new Date(),
+            })
         }
     }
 })
