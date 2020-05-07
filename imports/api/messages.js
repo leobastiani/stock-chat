@@ -22,8 +22,8 @@ if (Meteor.isServer) {
                 return Messages.find({ room: { $eq: room } })
             },
             children: [{
-                find(message) {
-                    return Meteor.users.find({ _id: message.owner }, { fields: { username: 1 } });
+                find({ owner }) {
+                    return Meteor.users.find({ _id: owner }, { fields: { username: 1 } });
                 }
             }]
         }
@@ -38,6 +38,7 @@ Meteor.methods({
         if (!this.userId) {
             throw new Meteor.Error('not-authorized');
         }
+        // owner might be Bot if it is a command
         let owner = this.userId
 
         room = room.trim()
