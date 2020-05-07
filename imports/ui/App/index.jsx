@@ -3,7 +3,7 @@ import './style.css'
 import { useTracker } from 'meteor/react-meteor-data'
 import MessageReader from '/imports/ui/MessageReader'
 import FormMessage from '/imports/ui/FormMessage'
-import Scroller from '../RoomChanger/Scroller'
+import Scroller from '/imports/ui/Scroller'
 import AccountsUIWrapper from '/imports/ui/AccountsUIWrapper'
 import 'react-chat-elements/dist/main.css'
 
