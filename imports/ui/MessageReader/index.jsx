@@ -13,15 +13,15 @@ const TimeStamp = ({ children: timeStamp }) => {
   return <div style={{color: 'blue', whiteSpace: 'nowrap'}}>{timeStamp.toLocaleDateString()} {timeStamp.toLocaleTimeString()}</div>
 }
 
-const Message = ({ children: message }) => {
+const MessageText = ({ children: message }) => {
   return <div>{message}</div>
 }
 
-const Post = ({ username, message, createdAt: timeStamp }) => {
+const Message = ({ username, message, createdAt: timeStamp }) => {
   return <div className="post">
     <TimeStamp>{timeStamp}</TimeStamp>
     <User>{username}</User>
-    <Message>{message}</Message>
+    <MessageText>{message}</MessageText>
   </div>
 }
 
@@ -44,6 +44,6 @@ export default ({ scrollToBottom, room }) => {
   }
 
   return <div id="messages">
-    {messages.map(post => <Post key={post._id} {...post} />)}
+    {messages.map(post => <Message key={post._id} {...post} />)}
   </div>
 };
