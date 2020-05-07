@@ -24,6 +24,7 @@ export const App = () => {
     <div id='container'>
       <div id='header'>
         <center>
+          <div> Stock Chat | <a href="https://github.com/leobastiani/stock-chat">GitHub</a></div>
           <input
             id='room'
             placeholder='Main room'
