@@ -1,6 +1,4 @@
 import csv from 'csvtojson'
-import { Messages } from '/imports/api/messages'
-
 export default class StockQuote {
   static KEYS = [
     'Symbol',
@@ -47,17 +45,28 @@ export default class StockQuote {
   }
 }
 
+export class StockQuoteMessageError extends Error {
+  get name() { return 'StockQuoteMessageError' }
+}
+
 Meteor.methods({
   async 'StoqueQuote.message' (stock_code) {
+    if (!stock_code) {
+      throw new StockQuoteMessageError('Missing stock code')
+    }
+
     try {
       const stockQuote = await new StockQuote(stock_code)
       if (stockQuote.isInvalid) {
-        return `Quote ${stockQuote.Symbol} is invalid`
+        throw new StockQuoteMessageError(`Quote ${stockQuote.Symbol} is invalid`)
       } else {
         return `${stockQuote.Symbol} quote is $${stockQuote.Close} per share`
       }
     } catch (e) {
-      return 'Server unavailable'
+      if(e instanceof StockQuoteMessageError) {
+        throw e;
+      }
+      throw new StockQuoteMessageError('Server unavailable')
     }
   }
 })

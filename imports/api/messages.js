@@ -52,11 +52,19 @@ Meteor.methods({
     if (message != '') {
       const mc = new MessageCommand(message)
       if (mc.isCommand) {
-        if (Meteor.isClient) return
+        if (Meteor.isClient) return;
 
         owner = Meteor.call('Bot')._id
         if (mc.command == 'stock') {
-          message = await Meteor.call('StoqueQuote.message', mc.arg)
+          try {
+            message = await Meteor.call('StoqueQuote.message', mc.arg)
+          }
+          catch(e) {
+            if (e.constructor.name == 'StockQuoteMessageError') {
+              throw new Meteor.Error(e.message)
+            }
+            throw e
+          }
         }
       }
 

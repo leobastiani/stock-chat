@@ -33,8 +33,10 @@ describe('with nock', () => {
     })
 
     it('message', async () => {
-      const message = await Meteor.call('StoqueQuote.message', 'invalid')
-      assert.equal(message, 'Quote INVALID is invalid')
+      await assert.rejects(async () => await Meteor.call('StoqueQuote.message', 'invalid'), {
+        name: 'StockQuoteMessageError',
+        message: 'Quote INVALID is invalid',
+      })
     })
   })
 
@@ -65,7 +67,9 @@ describe('without connection', () => {
   })
 
   it('stock quote with error', async () => {
-    const message = await Meteor.call('StoqueQuote.message', 'aapl.us')
-    assert.equal(message, 'Server unavailable')
+    await assert.rejects(async () => await Meteor.call('StoqueQuote.message', 'aapl.us'), {
+      name: 'StockQuoteMessageError',
+      message: 'Server unavailable',
+    })
   })
 })

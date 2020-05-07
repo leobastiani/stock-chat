@@ -8,7 +8,11 @@ import AccountsUIWrapper from '/imports/ui/AccountsUIWrapper'
 import 'react-chat-elements/dist/main.css'
 
 const sendMessage = (room, message) => {
-  Meteor.call('messages.insert', room, message)
+  Meteor.call('messages.insert', room, message, function (error) {
+    if (error) {
+      alert(error.error)
+    }
+  })
 }
 
 export const App = () => {
