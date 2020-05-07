@@ -33,7 +33,7 @@ describe('with nock', () => {
         })
 
         it('message', async () => {
-            const message = await Meteor.call('stock_quote_message', 'invalid')
+            const message = await Meteor.call('StoqueQuote.message', 'invalid')
             assert.equal(message, 'Quote INVALID is invalid')
         })
     })
@@ -53,7 +53,7 @@ describe('with nock', () => {
         })
 
         it('message', async () => {
-            const message = await Meteor.call('stock_quote_message', 'aapl.us')
+            const message = await Meteor.call('StoqueQuote.message', 'aapl.us')
             assert.equal(message, 'AAPL.US quote is $300.63 per share')
         })
     })
@@ -65,7 +65,7 @@ describe('without connection', () => {
     })
 
     it('stock quote with error', async () => {
-        const message = await Meteor.call('stock_quote_message', 'aapl.us')
+        const message = await Meteor.call('StoqueQuote.message', 'aapl.us')
         assert.equal(message, 'Server unavailable')
     })
 })

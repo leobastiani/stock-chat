@@ -39,7 +39,7 @@ export default class StockQuote {
 }
 
 Meteor.methods({
-    async stock_quote_message(stock_code) {
+    async 'StoqueQuote.message'(stock_code) {
         try {
             const stockQuote = await new StockQuote(stock_code)
             if (stockQuote.isInvalid) {

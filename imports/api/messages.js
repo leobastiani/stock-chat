@@ -51,7 +51,7 @@ Meteor.methods({
 
                 owner = Meteor.call('Bot')._id
                 if (mc.command == 'stock') {
-                    message = await Meteor.call('stock_quote_message', mc.arg)
+                    message = await Meteor.call('StoqueQuote.message', mc.arg)
                 }
             }
 
