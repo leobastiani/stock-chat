@@ -7,10 +7,12 @@ const stockCodeAndResponses = {
     'invalid': `Symbol,Date,Time,Open,High,Low,Close,Volume\nINVALID,N/D,N/D,N/D,N/D,N/D,N/D,N/D`
 }
 
+beforeEach(() => {
+    nock.cleanAll()
+})
+
 describe('with nock', () => {
     beforeEach(() => {
-        nock.cleanAll()
-
         for (const stockCode in stockCodeAndResponses) {
             nock('https://stooq.com/')
                 .get(`/q/l/?s=${stockCode}&f=sd2t2ohlcv&h&e=csv`)
@@ -58,7 +60,6 @@ describe('with nock', () => {
 
 describe('without connection', () => {
     beforeEach(() => {
-        nock.cleanAll()
         nock.disableNetConnect()
     })
 
