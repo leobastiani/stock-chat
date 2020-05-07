@@ -10,19 +10,28 @@ export default class StockQuote {
     }
 
     async asyncConstructor() {
-        const json = await StockQuote.fromApiAsJson(this.stock_code)
-        for (const key of StockQuote.KEYS) {
-            this[key] = json[key]
+        try {
+            const json = await StockQuote.fromApiAsJson(this.stock_code)
+            for (const key of StockQuote.KEYS) {
+                this[key] = json[key]
+            }
+
+            this.isInvalid = this.Close == 'N/D'
+            this.setupMessage()
+        } catch(e) {
+            this.Symbol = this.stock_code.toUpperCase()
+            this.isInvalid = true
+            this.message = 'Server unavailable'
         }
-        this.isInvalid = this.Close == 'N/D'
     }
 
-    get message() {
+    setupMessage() {
         if (this.isInvalid) {
-            return `Quote ${this.Symbol} is invalid`
+            this.message = `Quote ${this.Symbol} is invalid`
         }
-
-        return `${this.Symbol} quote is $${this.Close} per share`
+        else {
+            this.message = `${this.Symbol} quote is $${this.Close} per share`
+        }
     }
 
     static fromApi(stock_code) {

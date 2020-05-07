@@ -64,6 +64,7 @@ describe('without connection', () => {
     })
 
     it('stock quote with error', async () => {
-        await assert.rejects(async () => new StockQuote('aapl.us'))
+        const stockQuote = await new StockQuote('aapl.us')
+        assert.equal(stockQuote.message, 'Server unavailable')
     })
 })
