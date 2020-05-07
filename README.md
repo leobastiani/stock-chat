@@ -3,4 +3,9 @@
 ![](http://g.recordit.co/MkNtWgUV1C.gif)
 
 ## Development
-[Install meteor](https://www.meteor.com/install) then run inside the project: `meteor`
+[Install meteor](https://www.meteor.com/install) then run inside the project:
+
+```bash
+meteor npm install
+meteor
+```
