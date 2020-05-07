@@ -1,14 +1,16 @@
-import assert from "assert";
+import assert from 'assert'
 import MessageCommand from './MessageCommand'
 
 it('can not be a command', () => {
-    const messageCommand = new MessageCommand('hello, how are you?')
-    assert(!messageCommand.isCommand)
+  const messageCommand = new MessageCommand('hello, how are you?')
+  assert(!messageCommand.isCommand)
 })
 
 it('has properties', () => {
-    const messageCommand = new MessageCommand('/some_command      =   some arguments')
-    assert(messageCommand.isCommand)
-    assert.equal(messageCommand.command, 'some_command')
-    assert.equal(messageCommand.arg, 'some arguments')
+  const messageCommand = new MessageCommand(
+    '/some_command      =   some arguments'
+  )
+  assert(messageCommand.isCommand)
+  assert.equal(messageCommand.command, 'some_command')
+  assert.equal(messageCommand.arg, 'some arguments')
 })

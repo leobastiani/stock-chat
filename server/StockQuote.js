@@ -1,56 +1,63 @@
 import csv from 'csvtojson'
-import { Messages } from "/imports/api/messages";
+import { Messages } from '/imports/api/messages'
 
 export default class StockQuote {
-    static KEYS = ['Symbol', 'Date', 'Time', 'Open', 'High', 'Low', 'Close', 'Volume']
+  static KEYS = [
+    'Symbol',
+    'Date',
+    'Time',
+    'Open',
+    'High',
+    'Low',
+    'Close',
+    'Volume'
+  ]
 
-    constructor(stock_code) {
-        this.stock_code = stock_code
+  constructor (stock_code) {
+    this.stock_code = stock_code
 
-        return this.asyncConstructor().then(() => this)
+    return this.asyncConstructor().then(() => this)
+  }
+
+  async asyncConstructor () {
+    const json = await StockQuote.fromApiAsJson(this.stock_code)
+    for (const key of StockQuote.KEYS) {
+      this[key] = json[key]
     }
 
-    async asyncConstructor() {
-        const json = await StockQuote.fromApiAsJson(this.stock_code)
-        for (const key of StockQuote.KEYS) {
-            this[key] = json[key]
-        }
+    this.isInvalid = this.Close == 'N/D'
+  }
 
-        this.isInvalid = this.Close == 'N/D'
-    }
+  static fromApi (stock_code) {
+    const { content } = HTTP.get('https://stooq.com/q/l/', {
+      params: {
+        s: stock_code,
+        f: 'sd2t2ohlcv',
+        h: '',
+        e: 'csv'
+      }
+    })
 
-    static fromApi(stock_code) {
-        const { content } = HTTP.get('https://stooq.com/q/l/', {
-            params: {
-                s: stock_code,
-                f: 'sd2t2ohlcv',
-                h: '',
-                e: 'csv',
-            }
-        })
-    
-        return content
-    }
+    return content
+  }
 
-    static async fromApiAsJson(stock_code) {
-        const array = await csv().fromString(await this.fromApi(stock_code))
-        return array[0]
-    }
+  static async fromApiAsJson (stock_code) {
+    const array = await csv().fromString(await this.fromApi(stock_code))
+    return array[0]
+  }
 }
 
 Meteor.methods({
-    async 'StoqueQuote.message'(stock_code) {
-        try {
-            const stockQuote = await new StockQuote(stock_code)
-            if (stockQuote.isInvalid) {
-                return `Quote ${stockQuote.Symbol} is invalid`
-            }
-            else {
-                return `${stockQuote.Symbol} quote is $${stockQuote.Close} per share`
-            }
-        }
-        catch(e) {
-            return 'Server unavailable'
-        }
+  async 'StoqueQuote.message' (stock_code) {
+    try {
+      const stockQuote = await new StockQuote(stock_code)
+      if (stockQuote.isInvalid) {
+        return `Quote ${stockQuote.Symbol} is invalid`
+      } else {
+        return `${stockQuote.Symbol} quote is $${stockQuote.Close} per share`
+      }
+    } catch (e) {
+      return 'Server unavailable'
     }
+  }
 })

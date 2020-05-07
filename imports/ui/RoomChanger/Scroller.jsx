@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react'
 
 const wrapper = {
   height: '100%',
   overflowY: 'auto',
-  overflowX: 'auto',
+  overflowX: 'auto'
 }
 
 export default ({ children, ...props }) => {
@@ -14,7 +14,9 @@ export default ({ children, ...props }) => {
     div.scrollTop = div.scrollHeight
   }
 
-  return <div ref={el} style={wrapper} {...props}>
-    {children(scrollToBottom)}
-  </div>
+  return (
+    <div ref={el} style={wrapper} {...props}>
+      {children(scrollToBottom)}
+    </div>
+  )
 }

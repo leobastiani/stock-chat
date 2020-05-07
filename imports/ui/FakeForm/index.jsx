@@ -1,13 +1,11 @@
-import React from 'react';
+import React from 'react'
 
 export default ({ onSubmit, children }) => {
   const fakeSubmit = (e, ...args) => {
     e.preventDefault()
     onSubmit(e, ...args)
-    return false;
+    return false
   }
 
-  return <form onSubmit={fakeSubmit}>
-    {children}
-  </form>
-};
+  return <form onSubmit={fakeSubmit}>{children}</form>
+}
