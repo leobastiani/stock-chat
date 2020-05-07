@@ -1,4 +1,5 @@
 import assert from "assert";
+import MessageCommand from './MessageCommand'
 
 it('can not be a command', () => {
     const messageCommand = new MessageCommand('hello, how are you?')
