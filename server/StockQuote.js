@@ -50,6 +50,7 @@ Meteor.methods({
             }
         }
         catch(e) {
+            throw e;
             return 'Server unavailable'
         }
     }
