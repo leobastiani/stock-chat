@@ -64,8 +64,6 @@ describe('without connection', () => {
     })
 
     it('stock quote with error', async () => {
-        const stockQuote = await new StockQuote('aapl.us')
-        assert(stockQuote.isInvalid)
-        assert.equal(stockQuote.Symbol, 'AAPL.US')
+        await assert.rejects(async () => new StockQuote('aapl.us'))
     })
 })

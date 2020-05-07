@@ -10,16 +10,11 @@ export default class StockQuote {
     }
 
     async asyncConstructor() {
-        try {
-            const json = await StockQuote.fromApiAsJson(this.stock_code)
-            for (const key of StockQuote.KEYS) {
-                this[key] = json[key]
-            }
-            this.isInvalid = this.Close == 'N/D'
-        } catch(e) {
-            this.isInvalid = true
-            this.Symbol = this.stock_code.toUpperCase()
+        const json = await StockQuote.fromApiAsJson(this.stock_code)
+        for (const key of StockQuote.KEYS) {
+            this[key] = json[key]
         }
+        this.isInvalid = this.Close == 'N/D'
     }
 
     get message() {
