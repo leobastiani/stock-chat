@@ -1,7 +1,6 @@
 import assert from "assert";
 import nock from 'nock';
-import { HTTP } from 'meteor/http'
-import QuoteRequester from './QuoteRequester';
+import StockQuote from './';
 
 const stockCodeAndResponses = {
     'aapl.us': `Symbol,Date,Time,Open,High,Low,Close,Volume\nAAPL.US,2020-05-06,22:00:01,300.46,303.24,298.87,300.63,35583438`,
@@ -17,27 +16,27 @@ describe('QuoteRequester with nock', () => {
         }
     })
 
-    it('requires', async () => {
-        const content = await StockQuote.request('aapl.us')
-        assert(content, stockCodeAndResponses['aapl.us'])
+    it('fromApi', async () => {
+        const content = await StockQuote.fromApi('aapl.us')
+        assert.strictEqual(content, stockCodeAndResponses['aapl.us'])
     })
 
-    it('requires an invalid quote', async () => {
+    it('requests an invalid quote', async () => {
         const stockQuote = await new StockQuote('invalid')
-        assert(stockQuote.isInvalid, true)
+        assert(stockQuote.isInvalid)
     })
 
-    it('requires a valid quote', async () => {
+    it('requests a valid quote', async () => {
         const stockQuote = await new StockQuote('aapl.us')
-        assert(stockQuote.isInvalid, false)
+        assert(!stockQuote.isInvalid)
 
-        assert(stockQuote.symbol, 'AAPL.US')
-        assert(stockQuote.date, '2020-05-06')
-        assert(stockQuote.time, '22:00:01')
-        assert(stockQuote.open, '300.46')
-        assert(stockQuote.high, '303.24')
-        assert(stockQuote.low, '298.87')
-        assert(stockQuote.close, '300.63')
-        assert(stockQuote.volume, '35583438')
+        assert.equal(stockQuote.Symbol, 'AAPL.US')
+        assert.equal(stockQuote.Date, '2020-05-06')
+        assert.equal(stockQuote.Time, '22:00:01')
+        assert.equal(stockQuote.Open, '300.46')
+        assert.equal(stockQuote.High, '303.24')
+        assert.equal(stockQuote.Low, '298.87')
+        assert.equal(stockQuote.Close, '300.63')
+        assert.equal(stockQuote.Volume, '35583438')
     })
 })
