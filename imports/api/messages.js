@@ -19,7 +19,10 @@ if (Meteor.isServer) {
   publishComposite('messages', function (room) {
     return {
       find () {
-        return Messages.find({ room: { $eq: room } }, { sort: { createdAt: -1 }, limit: 50 })
+        return Messages.find(
+          { room: { $eq: room } },
+          { sort: { createdAt: -1 }, limit: 50 }
+        )
       },
       children: [
         {
@@ -52,21 +55,19 @@ Meteor.methods({
     if (message != '') {
       const mc = new MessageCommand(message)
       if (mc.isCommand) {
-        if (Meteor.isClient) return;
+        if (Meteor.isClient) return
 
         owner = Meteor.call('Bot')._id
         if (mc.command == 'stock') {
           try {
             message = await Meteor.call('StoqueQuote.message', mc.arg)
-          }
-          catch(e) {
+          } catch (e) {
             if (e.constructor.name == 'StockQuoteMessageError') {
               throw new Meteor.Error(e.message)
             }
             throw e
           }
-        }
-        else {
+        } else {
           throw new Meteor.Error(`"/${mc.command}" is not a valid command`)
         }
       }

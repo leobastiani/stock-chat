@@ -46,7 +46,9 @@ export default class StockQuote {
 }
 
 export class StockQuoteMessageError extends Error {
-  get name() { return 'StockQuoteMessageError' }
+  get name () {
+    return 'StockQuoteMessageError'
+  }
 }
 
 Meteor.methods({
@@ -58,13 +60,15 @@ Meteor.methods({
     try {
       const stockQuote = await new StockQuote(stock_code)
       if (stockQuote.isInvalid) {
-        throw new StockQuoteMessageError(`Quote ${stockQuote.Symbol} is invalid`)
+        throw new StockQuoteMessageError(
+          `Quote ${stockQuote.Symbol} is invalid`
+        )
       } else {
         return `${stockQuote.Symbol} quote is $${stockQuote.Close} per share`
       }
     } catch (e) {
-      if(e instanceof StockQuoteMessageError) {
-        throw e;
+      if (e instanceof StockQuoteMessageError) {
+        throw e
       }
       throw new StockQuoteMessageError('Server unavailable')
     }
