@@ -7,14 +7,12 @@ import DotLoader from 'react-spinners/DotLoader'
 import './style'
 
 export default ({ scrollToBottom, room }) => {
-  const { ready, messages, users } = useTracker(() => {
+  const { ready, messages } = useTracker(() => {
     const subscription = Meteor.subscribe('messages', room)
     const messages = Messages.find({}, { sort: { createdAt: 1 } }).fetch()
-    const users = Meteor.users.find({}).fetch()
     return {
       ready: subscription.ready(),
-      messages,
-      users
+      messages
     }
   })
 

@@ -19,7 +19,7 @@ if (Meteor.isServer) {
   publishComposite('messages', function (room) {
     return {
       find () {
-        return Messages.find({ room: { $eq: room } })
+        return Messages.find({ room: { $eq: room } }, { sort: { createdAt: -1 }, limit: 50 })
       },
       children: [
         {
