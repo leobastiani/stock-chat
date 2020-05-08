@@ -66,6 +66,9 @@ Meteor.methods({
             throw e
           }
         }
+        else {
+          throw new Meteor.Error(`"/${mc.command}" is not a valid command`)
+        }
       }
 
       Messages.insert({
